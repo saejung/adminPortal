@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DGYM.User">
+	
+	<resultMap id="userMap" type="userVO">
+		<id property="userId" column="user_id"/>
+		<result property="userPwd" column="password"/>
+		<result property="authority" column="authority"/>
+		<result property="userNm" column="user_nm"/>
+		<result property="email" column="email"/>
+		<result property="telNo" column="tel_no"/>
+		<result property="empNo" column="emp_no"/>
+		<result property="gender" column="gender"/>
+	</resultMap>
+
+
+	<select id="selectUser" parameterType="hashMap" resultMap="userMap">
+		<![CDATA[
+			SELECT *
+			FROM TB_USER
+		]]>
+		<where>
+			1 = 1
+		    <if test="userId != null">
+				AND user_id = #{userId}				
+			</if>
+			<if test="userPwd != null">
+				AND password = #{userPwd}				
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertUser" parameterType="hashMap">
+		INSERT INTO TB_USER
+			(
+				user_id, password, authority, user_nm
+			)
+		VALUES
+			(
+				#{userId}, #{userPwd}, #{authority}, #{userNm} 
+			)
+	</insert>
+	
+</mapper>

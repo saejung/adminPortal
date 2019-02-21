@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+html {height:100%; }
+body {background:url(../images/login/bg_login.jpg) center top no-repeat #d2d2d2;background-size: cover;height: 100%;}
+#login {width:680px; margin:0 auto;} 
+
+#login .title {margin: 110px auto 60px;text-align: center;}
+
+#login .box {position:relative;box-sizing: border-box;background: rgba(255, 255, 255, 0.4);padding: 40px 150px;border: 1px solid #fff;}
+#login > .box > div {margin:0 0 5px 0;}
+#login > .box  div  label {display:inline-block;width:95px; height:29px;font-size:12px;font-weight:bold;line-height:29px}
+#login .box  .login_id, .login_pw{width:167px;height:29px;padding:0 5px;border:none;background:#fff;font-size:13px;line-height:29px;color:#454545}
+.btn_login{width: 95px;height: 64px;border:none;background:#0070bd;font-weight:bold;font-size:13px;color:#fff;position: absolute;top: 40px;right: 150px;}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<security:http pattern="/css/**" security="none"/>
+	<security:http pattern="/html/**" security="none"/>
+    <security:http pattern="/images/**" security="none"/>
+ 	<security:http pattern="/js/**" security="none"/>
+ 	<security:http pattern="/resources/**" security="none"/>
+ 	<security:http pattern="\A/WEB-INF/jsp/.*\Z" request-matcher="regex" security="none"/>
+
+	
+	<http pattern="/admin/**" auto-config="true" use-expressions="true">
+		
+		<intercept-url pattern="/admin/login" access="permitAll"/>
+		<intercept-url pattern="/admin/**" access="hasAnyRole('ROLE_ADMIN')"/>
+		
+		<form-login login-page="/admin/login"
+					login-processing-url="/admin/loginProcess"
+					authentication-success-handler-ref="LoginSuccessHandler"
+					authentication-failure-url="/admin/login"
+					authentication-failure-handler-ref="LoginFailureHandler"
+					username-parameter="userId" password-parameter="userPwd"/>
+					
+		<logout invalidate-session="true"
+			logout-url="/admin/logout"
+			delete-cookies="true"
+
+			success-handler-ref="LogoutSuccessHandler" />
+			
+		<headers>
+	        <frame-options policy="SAMEORIGIN"/> <!-- iframe 안되는걸 방지 -->
+	    </headers>
+	    			
+	</http>
+	
+	<beans:bean id="LoginSuccessHandler" class="egovframework.dgym.cmm.security.handler.UserLoginSuccessHandler"/>
+	<beans:bean id="LoginFailureHandler" class="egovframework.dgym.cmm.security.handler.UserLoginFailureHandler"/>
+	<beans:bean id="LogoutSuccessHandler" class="egovframework.dgym.cmm.security.handler.UserLogoutSuccessHandler" />
+	<beans:bean id="LoginService" class="egovframework.dgym.cmm.security.LoginService"/>
+		
+	<authentication-manager>
+		<authentication-provider user-service-ref="LoginService">
+			<password-encoder ref="passwordEncoder">
+				<salt-source user-property="username"/>
+			</password-encoder>	
+		</authentication-provider>
+	</authentication-manager>
+	
+	<!-- ShaPasswordEncoder bean 등록 -->
+	<beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg name="strength" value="256"></beans:constructor-arg>
+	</beans:bean>
+	
+</beans:beans>
